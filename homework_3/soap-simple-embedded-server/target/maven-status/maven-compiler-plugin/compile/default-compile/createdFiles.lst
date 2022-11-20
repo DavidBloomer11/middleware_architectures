@@ -1,0 +1,4 @@
+db\Passenger.class
+services\TourService.class
+db\Booking.class
+db\DB.class

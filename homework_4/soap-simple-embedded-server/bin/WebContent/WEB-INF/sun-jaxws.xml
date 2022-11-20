@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
+
+    <endpoint name="TestWebService" implementation="services.TestService" url-pattern="/testWebService" ></endpoint>
+    <endpoint name="TestWebService" implementation="services.HelloWorld" url-pattern="/helloworld" ></endpoint>
+
+
+</endpoints>
