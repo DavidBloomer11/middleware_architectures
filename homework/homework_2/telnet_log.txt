@@ -1,1 +1,0 @@
-For the telnet assignment I couldn't connect to the given IP address 147.32.233.18 8888. Also I couldn't connect to the domain fit.cvut.cz 80
