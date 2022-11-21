@@ -1,0 +1,78 @@
+bloom@David-PC MINGW64 ~
+$ curl http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   320  100   320    0     0    420      0 --:--:-- --:--:-- --:--:--   420<html>
+<head>
+<title>Protocol</title>
+</head>
+<body>
+<h1>Protocol</h1>
+<p>Your next page is <a href="./protocol/welcome">/protocol/welcome</a></p>
+<pre>curl http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/welcome</pre>
+<p><a href="http://curl.haxx.se/docs/httpscripting.html">Help</a></p>
+</body>
+</html>
+
+
+bloom@David-PC MINGW64 ~
+$ curl http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/welcome
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   117  100   117    0     0     58      0  0:00:02  0:00:02 --:--:--    58OK
+Your next page is /protocol/get
+send GET parameter "name" with value "club"
+set Header "Accept" to "text/plain"
+
+
+bloom@David-PC MINGW64 ~
+$ curl --header "Accept: text/plain" -X GET "http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/get?name=club"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   171  100   171    0     0   2370      0 --:--:-- --:--:-- --:--:--  2408OK
+Your next page is /protocol/post
+send POST parameter "name" with value "ability"
+and set Header "Accept" is "text/plain"
+and set Header "Accept-Language" is "en-US"
+
+
+$ curl --header "Accept: text/plain" --header "Accept-Language: en-US" -X POST "http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/post?name=ability"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   108  100   108    0     0   1259      0 --:--:-- --:--:-- --:--:--  1270OK
+Your next page is /protocol/referer
+change referer to value "typos"
+set Header "Accept" is "text/html"
+
+
+$ curl -e "claiming" http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/referer -H "Accept: text/html"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   124  100   124    0     0   1831      0 --:--:-- --:--:-- --:--:--  1823OK
+Your next page is /protocol/useragent
+and change User-Agent to value "unto"
+and set Header "Accept-Language" is "en-US"
+
+
+$ curl -A "unto" -H "Accept-Language: en-US" http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/useragent
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    87  100    87    0     0   1278      0 --:--:-- --:--:-- --:--:--  1298OK
+Your next page is /protocol/cookie
+send cookie called "name" with value "immortal"
+
+
+$ curl -b "name=immortal" http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/cookie -H "Accept: text/html"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   111  100   111    0     0   1236      0 --:--:-- --:--:-- --:--:--  1247OK
+Your next page is /protocol/auth
+authenticate by "amdahl:experimental"
+set Header "Accept" is "text/html"
+
+$ curl -u "amdahl:experimental" http://147.32.233.18:8888/NI-AM1-ApplicationProtocols/protocol/auth -H "Accept: text/html"
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    34  100    34    0     0    354      0 --:--:-- --:--:-- --:--:--   357OK
+Your final result is: canticle
+

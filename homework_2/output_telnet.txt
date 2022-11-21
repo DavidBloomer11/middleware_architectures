@@ -1,0 +1,41 @@
+root@heertech-server:~# telnet 147.32.233.18 8888
+Trying 147.32.233.18...
+Connected to 147.32.233.18.
+Escape character is '^]'.
+GET /NI-AM1-ApplicationProtocols/httpTelnet1 HTTP/1.1
+Host: 147.32.233.18
+User-Agent: fit-telnet
+Accept: text/html
+Accept-Charset: UTF-8
+Accept-Language: en-US
+
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Content-Type: text/html;charset=UTF-8
+Content-Length: 3
+Date: Sun, 23 Oct 2022 19:29:29 GMT
+
+OK
+
+
+
+-------------------------------------------------------------
+
+root@heertech-server:~# telnet 147.32.233.18 8888
+Trying 147.32.233.18...
+Connected to 147.32.233.18.
+Escape character is '^]'.
+POST /NI-AM1-ApplicationProtocols/httpTelnet2 HTTP/1.1
+Host: 147.32.233.18
+Referer: mi-mdw
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 8
+
+data=fit
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Content-Type: text/html;charset=UTF-8
+Content-Length: 3
+Date: Sun, 23 Oct 2022 19:40:54 GMT
+
+OK
