@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 
 from asgiref.sync import sync_to_async
@@ -10,11 +10,14 @@ import time
 from .models import Customer, Tour, Country, Location, CustomerOnTour
 
 from rest_framework import viewsets
+from rest_framework import views
 from rest_framework import permissions, generics, status
 from .serializers import CustomerSerializer, TourSerializer, LocationSerializer, CountrySerializer, CustomerOnTourSerializer
 
 from .viewsets import HateoasModelViewSet
 # Create your views here.
+
+from .models import Tour
 
 # Class based
 class CustomerViewSet(viewsets.ModelViewSet):
@@ -63,6 +66,8 @@ class TourViewSet(viewsets.ModelViewSet):
         
         return queryset
 
+
+
     
 
 
@@ -101,7 +106,22 @@ class TourViewSet2(HateoasModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+
+    def destroy(self, request, pk=None, admin = False):
+        admin = request.query_params.get('admin')
+        try:
+            tour = Tour.objects.get(pk=int(pk))
+            if admin:
+            # If admin request, the resource will be deleted
+                tour = Tour.objects.get(pk=int(pk))
+                tour.delete()
+                return HttpResponse(status=200)
+            else:
+                response = f"http://127.0.0.1:8000/api/status/{pk}/"
+                return HttpResponse(response,status=202)
+        except:
+            # Resource doesn't exists so return 404
+            return HttpResponse(status=404)
 
     def get_retrieve_links(self, request, instance):
         qs = CustomerOnTour.objects.filter(tour=instance)
@@ -116,3 +136,10 @@ class TourViewSet2(HateoasModelViewSet):
         } 
 
 
+def view_status(request,id):
+    # Check if tour exists
+    try:
+        tour = Tour.objects.get(pk=int(id))
+        return HttpResponse('pending')
+    except:
+        return HttpResponse('deleted')
