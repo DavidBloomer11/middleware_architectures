@@ -12,5 +12,6 @@ router.register(r'customers-on-tours', views.CustomerOnTourViewSet)
 
 urlpatterns = [
     path('',include(router.urls)),
-    path('status/<slug:id>/',views.view_status,name='api_view_status')
+    path('status/<slug:id>/',views.view_status,name='api_view_status'),
+    path('test',views.view_conditional)
 ]

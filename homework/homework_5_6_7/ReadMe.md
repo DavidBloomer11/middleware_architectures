@@ -22,9 +22,11 @@ Now the server should be running on <a  href="http://127.0.0.1:8000/">http://127
 
 The following base endpoints are defined:
 <ul>
-	<li><a  href="http://127.0.0.1:8000/api/customers">api/customers</a>
-	<li><a  href="http://127.0.0.1:8000/api/tours">api/tours</a>
-	<li><a  href="http://127.0.0.1:8000/api/locations">api/locations</a>
-    <li><a  href="http://127.0.0.1:8000/api/countries">api/countries</a>
-    <li><a  href="http://127.0.0.1:8000/api/customers-on-tours">api/customers-on-tours</a>
+	<li><a  href="http://127.0.0.1:8000/v1/api/customers">api/customers</a>
+	<li><a  href="http://127.0.0.1:8000/v1/api/tours">api/tours</a>
+	<li><a  href="http://127.0.0.1:8000/v1/api/locations">api/locations</a>
+    <li><a  href="http://127.0.0.1:8000/v1api/countries">api/countries</a>
+    <li><a  href="http://127.0.0.1:8000/v1/api/customers-on-tours">api/customers-on-tours</a>
 </ul>
+
+

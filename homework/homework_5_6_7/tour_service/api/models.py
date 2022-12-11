@@ -1,4 +1,5 @@
 from django.db import models
+import hashlib
 
 # Create your models here.
 class Country(models.Model):
@@ -38,6 +39,20 @@ class Tour(models.Model):
     
     def __str__(self):
         return self.name
+
+
+    def get_hash(self):
+        string = self.name + self.location.name + str(self.tour_id)
+        hash = hashlib.md5(string.encode('utf-8'))
+        return hash.hexdigest()
+
+    def get_weak_etag():
+        tour_list = Tour.objects.all()
+        string = ''
+        for tour in tour_list:
+            string += tour.name + str(tour.tour_id)
+        hash = hashlib.md5(string.encode('utf-8'))
+        return hash.hexdigest()
 
 class Customer(models.Model):
     customer_id = models.AutoField(primary_key=True)

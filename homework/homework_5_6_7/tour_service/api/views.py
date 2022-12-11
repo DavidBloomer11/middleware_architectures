@@ -19,6 +19,8 @@ from .viewsets import HateoasModelViewSet
 
 from .models import Tour
 
+from django.views.decorators.http import condition
+
 # Class based
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -143,3 +145,19 @@ def view_status(request,id):
         return HttpResponse('pending')
     except:
         return HttpResponse('deleted')
+
+
+
+def etag(request):
+    '''This function takes the request and generates some sort of etag out of it
+    example: hashing a object to an etag
+    '''
+    return 'xyz'
+
+@condition(etag_func=etag)
+def view_conditional(request):
+    # Set Etag and Last-modifier response headers
+
+    return HttpResponse('hello')
+
+
