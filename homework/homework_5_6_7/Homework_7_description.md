@@ -15,54 +15,58 @@ This endpoints uses weak ETags, meaning that it only considers modification to n
 consider modifications to the location of the tour.
 
 The available operations are:
+
 <b>GET</b>
+
 <i>request</i>
 
 > GET /tours
+
 > If-None-Match: ...
 
 <i>response if ETag matches</i>
 
 > 304 not modified
+
 > ETag: ...
 
 <i>response if ETag doesn't match</i>
 
 > 200 ok
+
 > ETag: ...
 
-<b>POST</b>
-<i>request</i>
+<i>If no ETag is provided it will just return the resources</i>
 
-> POST /tours
-> name: ...
-> location: ...
-
-<i>response</i>
-
-> 201 Created
-> resource
-> ETag: ...
-
+<i>Other request methods have been handled in previous homeworks and use the endpoint /v1/api/tours</i>
 
 ### /tours/id
 This endpoint uses strong ETags, meaning that it takes into consideration the whole resource. If anything about the resource changes, than the ETag will also change with it.
 
 The available operations are:
+
 <b>GET</b>
+
 <i>request</i>
 
 > GET /tours/id
+
 > If-None-Match: ...
 
 <i>response if ETag matches</i>
 
 > 304 not modified
+
 > ETag: ...
 
 <i>response if ETag doesn't match</i>
 
 > 200 ok
+
 > resource
+
 > ETag: ...
 
+<i>If no ETag is provided it will just return the resource</i>
+
+<i>Other request methods have been handled in previous homeworks and use the endpoint /v1/api/tours/id</i>

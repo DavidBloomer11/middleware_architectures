@@ -1,0 +1,189 @@
+---------------------------------------------------------------------------
+ENDPOINT v2/tours/ --> weak ETag
+---------------------------------------------------------------------------
+Get all the tours via version 2 of the api
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i http://127.0.0.1:8000/v2/api/tours/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   409  100   409    0     0   1658      0 --:--:-- --:--:-- --:--:--  1662HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:23:25 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+ETag: "98c182bd4261486c03564d1ac0047524"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 409
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+[{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"Central Park tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"},{"url":"http://127.0.0.1:8000/v1/api/tours/9/","name":"Central park history tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"},{"url":"http://127.0.0.1:8000/v1/api/tours/10/","name":"Central Highland Park tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"}]
+
+---------------------------------------------------------------------------
+
+Change the location of a tour via version 1 of the api to see if ETag will change
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -X PATCH -d "location=http://127.0.0.1:8000/v1/api/locations/2/" -i http://127.0.0.1:8000/v1/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   179  100   129  100    50    550    213 --:--:-- --:--:-- --:--:--   764HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:27:23 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+Vary: Accept, Cookie
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+X-Frame-Options: DENY
+Content-Length: 129
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"Central Park tour","location":"http://127.0.0.1:8000/v1/api/locations/2/"}
+
+---------------------------------------------------------------------------
+
+Now, if we use the "If-None-Match" header with the previous ETag, we should get a 304 response.
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i --header "If-None-Match:98c182bd4261486c03564d1ac0047524" http://127.0.0.1:8000/v2/api/tours/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0HTTP/1.1 304 Not Modified
+Date: Sun, 11 Dec 2022 16:31:50 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: text/html; charset=utf-8
+ETag: "98c182bd4261486c03564d1ac0047524"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 0
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+Indeed, the response is 304 because the weak ETag didn't catch the change of location.
+
+---------------------------------------------------------------------------
+Now we'll change the name of a location to see if this will change the ETag:
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -X PATCH -d "name=History Tour" -i http://127.0.0.1:8000/v1/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   141  100   124  100    17    487     66 --:--:-- --:--:-- --:--:--   557HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:33:49 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+Vary: Accept, Cookie
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+X-Frame-Options: DENY
+Content-Length: 124
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"History Tour","location":"http://127.0.0.1:8000/v1/api/locations/2/"}
+
+---------------------------------------------------------------------------
+We use the same ETag as we previously used, normally it should give a 200 status code because the resource now is modified.
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i --header "If-None-Match:98c182bd4261486c03564d1ac0047524" http://127.0.0.1:8000/v2/api/tours/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   404  100   404    0     0   1611      0 --:--:-- --:--:-- --:--:--  1616HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:35:21 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+ETag: "78661eb5d6fc03bfb63de9af9cf30c76"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 404
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+[{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"History Tour","location":"http://127.0.0.1:8000/v1/api/locations/2/"},{"url":"http://127.0.0.1:8000/v1/api/tours/9/","name":"Central park history tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"},{"url":"http://127.0.0.1:8000/v1/api/tours/10/","name":"Central Highland Park tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"}]
+
+---------------------------------------------------------------------------
+ENDPOINT v2/tours/id --> strong ETag
+---------------------------------------------------------------------------
+The strong ETag is implemented using the /tours/id endpoint. Let's get the ETag of resource with ID is 8
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i http://127.0.0.1:8000/v2/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   124  100   124    0     0    494      0 --:--:-- --:--:-- --:--:--   496HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:41:41 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+ETag: "83f21adf4815400aae4fcd602ec2d3f6"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 124
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"History Tour","location":"http://127.0.0.1:8000/v1/api/locations/2/"}
+
+
+--------------------------------------------------------------------------
+Now let's do a get request with this ETag before we apply changes.
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i --header "If-None-Match:83f21adf4815400aae4fcd602ec2d3f6" http://127.0.0.1:8000/v2/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0HTTP/1.1 304 Not Modified
+Date: Sun, 11 Dec 2022 16:45:44 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: text/html; charset=utf-8
+ETag: "83f21adf4815400aae4fcd602ec2d3f6"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 0
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+--------------------------------------------------------------------------
+The ETag is 83f21adf4815400aae4fcd602ec2d3f6. Let's now change the resource location back to location 1. 
+If we do this it should also change the ETag.
+
+$ curl -u admin:password -X PATCH -d "location=http://127.0.0.1:8000/v1/api/locations/1/" http://127.0.0.1:8000/v1/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   174  100   124  100    50    538    216 --:--:-- --:--:-- --:--:--   759{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"History Tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"}
+
+--------------------------------------------------------------------------
+Finally, let's check if the ETag changed by copying the get operation 
+
+bloom@David-PC MINGW64 ~
+$ curl -u admin:password -i --header "If-None-Match:83f21adf4815400aae4fcd602ec2d3f6" http://127.0.0.1:8000/v2/api/tours/8/
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   124  100   124    0     0    544      0 --:--:-- --:--:-- --:--:--   543HTTP/1.1 200 OK
+Date: Sun, 11 Dec 2022 16:46:47 GMT
+Server: WSGIServer/0.2 CPython/3.8.10
+Content-Type: application/json
+ETag: "3b7517d51a5a1344752748f5fb22b95b"
+Vary: Accept, Cookie
+Allow: OPTIONS, GET
+X-Frame-Options: DENY
+Content-Length: 124
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+{"url":"http://127.0.0.1:8000/v1/api/tours/8/","name":"History Tour","location":"http://127.0.0.1:8000/v1/api/locations/1/"}
+
+It outputs 200 which means that the changed location resulted in a change of the ETag (strong ETag)
