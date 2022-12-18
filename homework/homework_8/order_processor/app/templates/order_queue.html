@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order queue</title>
+</head>
+<body>
+    <h1>Order Queue</h1>
+    <ul>
+        {% for i in queue %}
+        <li>type: {{i.type}} | name: {{i.name}} | date added: {{i.date_added}}</li>
+        {% endfor %}
+
+    </ul>
+
+    <br>
+    <br>
+    <a href="/bookings/queue">Booking queue</a>
+    <br>
+    <a href="/trips/queue/">Trip queue</a>
+    <br>
+    <a href="/orders/add/">Add order</a>
+</body>
+</html>

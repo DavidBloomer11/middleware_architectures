@@ -32,6 +32,7 @@ class Tour(models.Model):
     tour_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     location = models.ForeignKey(Location,on_delete =models.DO_NOTHING)
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = True

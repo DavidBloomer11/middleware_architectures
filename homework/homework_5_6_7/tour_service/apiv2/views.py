@@ -19,8 +19,14 @@ def weak_etag(request):
 
     return etag
 
+def last_modified(request):
+    tour_list = Tour.objects.get(pk=8)
+    context = {'request':request}
+    serializer = TourSerializer(tour_list, many=True,context=context)
+    return Response(serializer.data)
+
 @api_view(('GET',))
-@condition(etag_func=strong_etag)
+@condition(etag_func=strong_etag,last_modified_func=last_modified)
 def get_tour(request,id):
     tour = Tour.objects.get(pk=int(id))
 
