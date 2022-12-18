@@ -1,0 +1,2 @@
+http://147.32.233.18:8888/MI-MDW-LastMinute1/list
+http://147.32.233.18:8888/MI-MDW-LastMinute2/list
